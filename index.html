@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Налоговая нагрузка 2027</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+/* Layout: фирменная шапка с логотипом → две колонки: анкета 2026 слева, результат 2027 справа; на телефоне одна колонка */
+:root {
+  --bg: #f8f5f7; --surface: #ffffff; --ink: #2e2b2a; --muted: #6f666c; --line: #e6dde3;
+  --brand: #722d5c; --accent: #a2295b; --violet: #502c5a; --band: #3c2144; --band-ink: #ffffff;
+  --soft: #f3e8ef; --good: #1f7a55; --good-soft: #e3f3ea; --warn: #9a6200; --warn-soft: #fbf0d9;
+  --crit: #b3261e; --crit-soft: #fbe5e3; --bar: #c9a3bb;
+  --font: "Lato", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #18131a; --surface: #221b24; --ink: #eee7ec; --muted: #a99ea7; --line: #3a2f3c;
+    --brand: #d58ab7; --accent: #e3739f; --violet: #b99ac6; --band: #2b1830; --band-ink: #ffffff;
+    --soft: #33243a; --good: #6cd3a2; --good-soft: #17352a; --warn: #f0bf62; --warn-soft: #3a2e14;
+    --crit: #ff8f86; --crit-soft: #3d1c1a; --bar: #7d5372; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #18131a; --surface: #221b24; --ink: #eee7ec; --muted: #a99ea7; --line: #3a2f3c;
+  --brand: #d58ab7; --accent: #e3739f; --violet: #b99ac6; --band: #2b1830; --band-ink: #ffffff;
+  --soft: #33243a; --good: #6cd3a2; --good-soft: #17352a; --warn: #f0bf62; --warn-soft: #3a2e14;
+  --crit: #ff8f86; --crit-soft: #3d1c1a; --bar: #7d5372; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1220px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.band { background: var(--band); color: var(--band-ink); }
+header.band .wrap { padding-block: 22px 26px; display: grid; gap: 14px; }
+header.band img { width: 220px; max-width: 60%; height: auto; display: block; }
+header h1 { margin: 0; font-size: clamp(26px, 4.4vw, 40px); font-weight: 900; letter-spacing: -0.01em; text-wrap: balance; line-height: 1.1; }
+header h1 span { color: #e9a6c8; }
+header p { margin: 0; max-width: 66ch; opacity: .88; }
+main.wrap { padding-block: 24px 40px; display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { main.wrap { grid-template-columns: minmax(0, 1fr); } }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+form.inputs { display: grid; gap: 16px; }
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 14px; min-width: 0; }
+legend { font-size: 13px; font-weight: 900; color: var(--brand); padding: 0 0 2px; display: flex; gap: 8px; align-items: baseline; }
+legend i { font-style: normal; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: var(--surface); font-size: 12px; flex: none; }
+.sep { border: 0; border-top: 1px solid var(--line); margin: 2px 0; }
+.lead { font-size: 13px; color: var(--muted); margin: -6px 0 0; }
+.field { display: grid; gap: 5px; min-width: 0; }
+.field label { font-size: 13.5px; font-weight: 700; }
+.field small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.field small b { color: var(--ink); font-weight: 700; }
+.field input[type=text], .field select { font: inherit; font-variant-numeric: tabular-nums; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--ink); width: 100%; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.seg button { font: inherit; font-weight: 700; border: 0; background: transparent; color: var(--muted); padding: 8px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed=true] { background: var(--brand); color: #fff; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+.check input { width: 18px; height: 18px; accent-color: var(--brand); margin-top: 2px; flex: none; }
+details.more { border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; }
+details.more summary { cursor: pointer; font-weight: 700; font-size: 13.5px; color: var(--brand); }
+details.more[open] summary { margin-bottom: 12px; }
+details.more > div { display: grid; gap: 14px; }
+.private { font-size: 12px; background: var(--soft); border-radius: 8px; padding: 8px 10px; }
+.example { font-size: 12px; color: var(--muted); }
+
+.res { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; min-width: 0; }
+.res h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; font-weight: 700; }
+.summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0; overflow: hidden; }
+.summary > div { padding: 16px 18px; border-right: 1px solid var(--line); min-width: 0; }
+.summary > div:last-child { border-right: 0; }
+@media (max-width: 600px) { .summary { grid-template-columns: 1fr; } .summary > div { border-right: 0; border-bottom: 1px solid var(--line); } .summary > div:last-child { border-bottom: 0; } }
+.k { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.v { font-size: clamp(22px, 2.8vw, 28px); font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.15; margin-top: 4px; }
+.v.accent { color: var(--accent); }
+.sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.up { color: var(--crit); font-weight: 700; } .down { color: var(--good); font-weight: 700; }
+
+.list { display: grid; gap: 8px; }
+.note { padding: 10px 12px; border-radius: 9px; font-size: 14px; border-left: 4px solid; }
+.note.good { background: var(--good-soft); border-color: var(--good); }
+.note.info { background: var(--soft); border-color: var(--violet); }
+.note.warn { background: var(--warn-soft); border-color: var(--warn); }
+.note.crit { background: var(--crit-soft); border-color: var(--crit); }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; min-width: 700px; }
+th { text-align: right; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding: 0 8px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; padding-left: 0; }
+td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+td:first-child { white-space: normal; }
+td.name b { display: block; }
+td.name span { font-size: 12px; color: var(--muted); }
+tr.off td { color: var(--muted); }
+tr.off td.name b { font-weight: 400; }
+tr.best td { background: var(--good-soft); }
+tr.best td:first-child { box-shadow: inset 3px 0 0 var(--good); padding-left: 10px; }
+.pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: var(--good); color: var(--surface); margin-left: 6px; vertical-align: 1px; }
+.pill.cur { background: var(--violet); }
+.pill { white-space: nowrap; }
+/* Телефон: таблица режимов превращается в карточки */
+@media (max-width: 600px) {
+  .res .tbl-wrap:not(.lawwrap) { overflow: visible; }
+  .res .tbl-wrap:not(.lawwrap) table { min-width: 0; display: block; }
+  .res .tbl-wrap:not(.lawwrap) thead { display: none; }
+  .res .tbl-wrap:not(.lawwrap) tbody { display: grid; gap: 10px; }
+  .res .tbl-wrap:not(.lawwrap) tr { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+  .res .tbl-wrap:not(.lawwrap) tr.best { background: var(--good-soft); border-color: var(--good); }
+  .res .tbl-wrap:not(.lawwrap) td { display: block; border: 0; padding: 0; text-align: left; white-space: normal; background: transparent !important; box-shadow: none !important; }
+  .res .tbl-wrap:not(.lawwrap) td.name { grid-column: 1 / -1; padding: 0 0 4px; }
+  .res .tbl-wrap:not(.lawwrap) td.name b { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; }
+  .res .tbl-wrap:not(.lawwrap) td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
+  .res .tbl-wrap:not(.lawwrap) td.total, .res .tbl-wrap:not(.lawwrap) td.hand { font-weight: 900; font-size: 16px; }
+  .res .tbl-wrap:not(.lawwrap) td.na { grid-column: 1 / -1; display: none; }
+}
+.total { font-weight: 900; }
+.bar { height: 5px; background: var(--line); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--bar); border-radius: 3px; }
+tr.best .bar i { background: var(--good); }
+
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 600px) { .cols { grid-template-columns: 1fr; } }
+.pcard { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 6px; align-content: start; }
+.pcard.dash { border-style: dashed; }
+.pcard .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.line { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.line b { font-size: 18px; }
+.line span:last-child { text-align: right; white-space: nowrap; }
+
+.cta { background: var(--band); color: var(--band-ink); border-radius: 14px; padding: 22px; display: grid; gap: 10px; }
+.cta h3 { margin: 0; font-size: 22px; font-weight: 900; text-wrap: balance; }
+.cta p { margin: 0; opacity: .9; max-width: 62ch; }
+.cta .contacts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 15px; }
+.cta .contacts span { user-select: all; font-weight: 700; }
+.cta a.btn { justify-self: start; background: #fff; color: #3c2144; font-weight: 900; text-decoration: none; padding: 11px 20px; border-radius: 10px; }
+.channel { border-left: 4px solid var(--accent); display: grid; gap: 10px; }
+.channel h3 { margin: 0; font-size: 19px; font-weight: 900; color: var(--brand); text-wrap: balance; }
+.channel p { margin: 0; color: var(--muted); max-width: 62ch; }
+.channel a.btn { justify-self: start; background: var(--brand); color: #fff; font-weight: 900; text-decoration: none; padding: 11px 20px; border-radius: 10px; }
+.law { font-size: 13px; display: grid; gap: 4px; }
+details.law { min-width: 0; }
+@media (max-width: 600px) {
+  details.law table { min-width: 0; }
+  details.law tr { display: block; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  details.law td { display: block; border: 0; padding: 0; width: auto !important; }
+  details.law td:first-child { font-weight: 700; margin-bottom: 2px; }
+}
+details.law > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-weight: 700; font-size: 14px; color: var(--brand); }
+details.law > summary::-webkit-details-marker { display: none; }
+details.law > summary::after { content: "Показать"; font-size: 12px; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; white-space: nowrap; }
+details.law[open] > summary::after { content: "Свернуть"; }
+details.law[open] > summary { margin-bottom: 10px; }
+details.law > summary small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+.law table { min-width: 560px; font-size: 13px; }
+.law td { white-space: normal; text-align: left; padding: 7px 8px; }
+.law td:first-child { width: 42%; }
+.st { font-size: 11px; font-weight: 700; padding: 0 6px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); white-space: nowrap; }
+.st.ok { background: var(--good-soft); color: var(--good); }
+.notes { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
+.notes p { margin: 0; max-width: 95ch; }
+.notes b { color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) { .bar i { transition: width .25s ease; } }
+</style>
+
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <img src="data:image/png;base64,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" alt="TOPLINE">
+    <h1>Налоговая нагрузка <span>2027</span></h1>
+    <p>Внесите цифры 2026 года. Калькулятор покажет, с какими правами вы входите в 2027 год, сколько будете платить по новым правилам и сколько денег останется вам. Каждое правило — со ссылкой на Налоговый кодекс.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <form class="panel inputs" id="f" autocomplete="off">
+
+    <fieldset>
+      <legend><i>1</i>Кто вы сейчас</legend>
+      <div class="field">
+        <label>Форма бизнеса</label>
+        <div class="seg" role="group" aria-label="Форма бизнеса">
+          <button type="button" id="formOOO" aria-pressed="true">ООО</button>
+          <button type="button" id="formIP" aria-pressed="false">ИП</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="activity">Основной вид деятельности</label>
+        <select id="activity">
+          <option value="service" selected>Услуги населению и бизнесу</option>
+          <option value="retail">Розничная торговля в магазине или павильоне</option>
+          <option value="online">Торговля через маркетплейсы и интернет-магазин</option>
+          <option value="whole">Оптовая торговля, поставки юрлицам</option>
+          <option value="food">Общепит</option>
+          <option value="prod">Производство</option>
+          <option value="build">Строительство и ремонт</option>
+          <option value="it">IT, разработка, консалтинг</option>
+        </select>
+        <small>Тот, что даёт больше всего выручки. От него зависит, доступен ли патент (ст. 346.43 НК РФ).</small>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="regime26">Режим в 2026 году</label>
+          <select id="regime26">
+            <option value="usn_inc" selected>УСН «Доходы»</option>
+            <option value="usn_dr">УСН «Доходы минус расходы»</option>
+            <option value="osno">ОСНО</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="vat26">НДС на 31.12.2026</label>
+          <select id="vat26">
+            <option value="0">Не платим</option>
+            <option value="0.05" selected>5%</option>
+            <option value="0.07">7%</option>
+            <option value="0.22">22%</option>
+          </select>
+        </div>
+      </div>
+      <small class="lead" style="margin:0">«Не платим» — освобождение по п. 1 ст. 145 НК РФ. Ставка — та, что стоит в ваших счетах-фактурах.</small>
+    </fieldset>
+
+    <hr class="sep">
+
+    <fieldset>
+      <legend><i>2</i>Цифры 2026 года — официально</legend>
+      <p class="lead">Если год ещё не закончился, возьмите январь–сентябрь, разделите на 9 и умножьте на 12.</p>
+      <div class="field">
+        <label for="income26">Доход за 2026 год без НДС, ₽</label>
+        <input type="text" inputmode="numeric" id="income26" value="120 000 000">
+        <small><b>УСН:</b> итог книги учёта доходов и расходов — всё, что поступило на счёт и в кассу, включая авансы, без НДС (ст. 346.15, п. 1 ст. 346.17 НК РФ). <b>ОСНО:</b> доходы от реализации и внереализационные без НДС (ст. 248 НК РФ). <b>Патент:</b> итог книги учёта доходов ИП на ПСН (ст. 346.53 НК РФ). <b>ИП на УСН и патенте:</b> сложите доходы по обоим режимам.</small>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="employees">Средняя численность за 2026 год</label>
+          <input type="text" inputmode="numeric" id="employees" value="12">
+          <small>Среднесписочная плюс внешние совместители и исполнители по договорам ГПХ (пп. 15 п. 3 ст. 346.12 НК РФ). Директор входит, ИП себя не считает.</small>
+        </div>
+        <div class="field">
+          <label for="payroll">Выплаты людям за 2026 год, ₽</label>
+          <input type="text" inputmode="numeric" id="payroll" value="18 000 000">
+          <small>Начислено до вычета НДФЛ и облагается взносами: зарплата, премии, отпускные, ГПХ (ст. 420 НК РФ). База из РСВ за год. Без дивидендов.</small>
+        </div>
+      </div>
+      <div class="field">
+        <label for="e22">Оплачено поставщикам с НДС 22%, ₽</label>
+        <input type="text" inputmode="numeric" id="e22" value="50 000 000">
+        <small>Сумма с НДС по счетам-фактурам со ставкой 22%. Импорт: таможенная стоимость плюс НДС, уплаченный на таможне. Этот НДС принимается к вычету (ст. 171, 172 НК РФ).</small>
+      </div>
+      <div class="field">
+        <label for="e0">Оплачено поставщикам без НДС, ₽</label>
+        <input type="text" inputmode="numeric" id="e0" value="20 000 000">
+        <small>С документами: упрощенцы без НДС, ИП на патенте, самозанятые, аренда у физлиц.</small>
+      </div>
+      <details class="more" id="more1">
+        <summary>Есть поставщики с НДС 5% или 7%</summary>
+        <div>
+          <div class="row2">
+            <div class="field">
+              <label for="e5">С НДС 5%, ₽</label>
+              <input type="text" inputmode="numeric" id="e5" value="">
+            </div>
+            <div class="field">
+              <label for="e7">С НДС 7%, ₽</label>
+              <input type="text" inputmode="numeric" id="e7" value="">
+            </div>
+          </div>
+          <small class="lead" style="margin:0">Упрощенцы с НДС по п. 8 ст. 164 НК РФ. Сумма с НДС. У покупателя на 22% этот НДС тоже принимается к вычету.</small>
+        </div>
+      </details>
+      <small class="lead" style="margin:0">Взносы и налоги в расходы не включайте — калькулятор посчитает их сам. Считаем, что все расходы есть в перечне ст. 346.16 НК РФ.</small>
+    </fieldset>
+
+    <hr class="sep">
+
+    <fieldset>
+      <legend><i>3</i>Что идёт мимо учёта</legend>
+      <div class="private">Ваши цифры никуда не отправляются: расчёт идёт только в вашем браузере.</div>
+      <div class="row2">
+        <div class="field">
+          <label for="envelope">Зарплата «в конвертах», ₽ за год</label>
+          <input type="text" inputmode="numeric" id="envelope" value="" placeholder="0">
+          <small>Сколько все сотрудники вместе получили на руки неофициально за 2026 год.</small>
+        </div>
+        <div class="field">
+          <label for="nodocs">Расходы без документов, ₽ за год</label>
+          <input type="text" inputmode="numeric" id="nodocs" value="" placeholder="0">
+          <small>Оплачено, но подтвердить нечем: наличные без чеков, переводы физлицам без договора.</small>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="sep">
+
+    <fieldset>
+      <legend><i>4</i>План на 2027 год</legend>
+      <div class="row2">
+        <div class="field">
+          <label for="growth">Рост выручки, %</label>
+          <input type="text" inputmode="text" id="growth" value="10">
+          <small>Рост продаж в ценах 2026 года. Расходы и зарплаты растут так же. Снижение — со знаком минус.</small>
+        </div>
+        <div class="field">
+          <label for="prices">Цены, если ставка НДС изменится</label>
+          <select id="prices">
+            <option value="same" selected>Не меняю</option>
+            <option value="up">Добавлю НДС сверху</option>
+          </select>
+          <small>«Не меняю»: покупатель платит прежнюю сумму, НДС выделяется из неё и уменьшает вашу выручку.</small>
+        </div>
+      </div>
+      <div class="row2" id="patentBox" hidden>
+        <div class="field">
+          <label for="patent26">Патенты 2026, ₽/год</label>
+          <input type="text" inputmode="numeric" id="patent26" value="150 000">
+        </div>
+        <div class="field">
+          <label for="patent27">Патенты 2027, ₽/год</label>
+          <input type="text" inputmode="numeric" id="patent27" value="180 000">
+        </div>
+      </div>
+      <small class="lead" id="patentHint" style="margin:0" hidden>Если патентов несколько — сумма. Стоимость — по калькулятору патента на сайте ФНС для вашего региона и вида деятельности (ст. 346.48, 346.50 НК РФ).</small>
+      <details class="more">
+        <summary>Ставки УСН и льгота по взносам</summary>
+        <div>
+          <div class="row2">
+            <div class="field">
+              <label for="rateInc">УСН «Доходы», %</label>
+              <input type="text" inputmode="decimal" id="rateInc" value="6">
+            </div>
+            <div class="field">
+              <label for="rateDr">УСН «Д − Р», %</label>
+              <input type="text" inputmode="decimal" id="rateDr" value="15">
+            </div>
+          </div>
+          <small class="lead" style="margin:0">6% и 15% или пониженная ставка по закону вашего региона (п. 1, 2 ст. 346.20 НК РФ).</small>
+          <div class="field">
+            <label for="priority">Льгота по взносам для МСП</label>
+            <select id="priority">
+              <option value="" selected>Нет, общий тариф 30% / 15,1%</option>
+              <option value="prio">Приоритетная отрасль: 15% сверх 1,5 МРОТ</option>
+              <option value="manuf">Обрабатывающее производство: 7,6% сверх 1,5 МРОТ</option>
+            </select>
+            <small>Только для субъектов МСП из реестра, по основному коду ОКВЭД из перечня Правительства (ст. 427 НК РФ). В пределах 1,5 МРОТ в месяц — 30%.</small>
+          </div>
+        </div>
+      </details>
+    </fieldset>
+    <div class="example">Цифры в форме — пример. Поставьте свои, расчёт обновляется сразу.</div>
+  </form>
+
+  <section class="res" aria-live="polite">
+    <div class="panel summary" id="summary"></div>
+
+    <div class="panel">
+      <h2>С чем вы входите в 2027 год</h2>
+      <div class="list" id="status"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Все режимы на 2027 год</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Режим</th><th>НДС</th><th>Налог</th><th>Взносы</th><th>Всего налогов</th><th>Нагрузка</th><th>Вам на руки</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin:10px 0 0">Нагрузка — доля налогов и взносов в деньгах, полученных от покупателей. «Вам на руки» для ООО — после НДФЛ с дивидендов по действующим ставкам.</p>
+    </div>
+
+    <div class="panel" id="greyBox" hidden></div>
+
+    <div class="panel" id="pocket"></div>
+
+    <div class="list" id="flags"></div>
+
+    <div class="cta">
+      <h3>Цифру вы увидели. Как сделать, чтобы прибыль осталась вам, — разберём на консультации.</h3>
+      <p>Калькулятор видит цифры, но не видит, как устроен бизнес: группа компаний, самозанятые, деньги через карты, договоры. Налоговая видит.</p>
+      <p>На консультации я смотрю на ваш бизнес на ваших цифрах. Показываю, где уже есть риск, где вы переплачиваете и как выстроить модель на 2027 год: оформлена верно, налоги по закону, а прибыль остаётся вам. Вы уходите с планом — с чего начать и в каком порядке.</p>
+      <a class="btn" id="ctaBtn" href="https://bothelp.cc/mini?domain=natalialegalizator&amp;id=6&amp;utm_source=kalkulyator_nalog_2027" target="_blank" rel="noopener">Записаться на консультацию</a>
+    </div>
+
+    <div class="panel channel">
+      <h3>Самый полезный канал для владельцев бизнеса</h3>
+      <p>Что меняется в налогах и проверках и что с этим делать собственнику. Разборы реальных ситуаций из практики Натальи Съединой.</p>
+      <a class="btn" href="https://t.me/+-Bp0kcGmdLFjOTNk" target="_blank" rel="noopener">Перейти в канал</a>
+    </div>
+
+    <details class="panel law">
+      <summary><span>Нормативная база<small>На каких статьях НК РФ и законах основан расчёт</small></span></summary>
+      <div class="tbl-wrap lawwrap">
+        <table>
+          <tbody>
+            <tr><td>Ставка НДС 22%</td><td>п. 3 ст. 164 НК РФ, закон от 28.11.2025 № 425-ФЗ <span class="st ok">действует</span></td></tr>
+            <tr><td>Освобождение от НДС на УСН при доходе до 20 млн ₽ в 2027–2029 годах</td><td>п. 1 ст. 145 НК РФ в ред. закона от 04.07.2026 № 228-ФЗ <span class="st ok">действует</span></td></tr>
+            <tr><td>НДС 5% и 7% на УСН без вычетов; входной НДС — в расходы</td><td>п. 8 ст. 164, пп. 8 п. 1 ст. 346.16 НК РФ; методические рекомендации ФНС по НДС для УСН <span class="st ok">действует</span></td></tr>
+            <tr><td>Ставку 5% или 7% применяют не меньше 12 кварталов подряд</td><td>п. 9 ст. 164 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Переход с ОСНО на УСН с 2027 года: уведомление до 31.12.2026, доход за 9 месяцев до 367,875 млн ₽</td><td>п. 1 ст. 346.13, п. 2 ст. 346.12 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Пороги ставки 5% (288,25 млн ₽) и лимит УСН (518,85 млн ₽) на 2027 год</td><td>п. 8 ст. 164, п. 4 ст. 346.13 НК РФ; индексация — п. 2 ст. 346.12 НК РФ, дефлятор 1,153 <span class="st">проект приказа Минэкономразвития</span></td></tr>
+            <tr><td>Численность на УСН — до 130 человек</td><td>пп. 15 п. 3 ст. 346.12 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Доходы и расходы на УСН, минимальный налог 1%</td><td>ст. 346.15, 346.16, 346.17, п. 6 ст. 346.18 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Уменьшение налога УСН «Доходы» и патента на взносы</td><td>п. 3.1 ст. 346.21, п. 1.2 ст. 346.51 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Лимит патента 15 млн ₽ и 15 человек</td><td>п. 6 ст. 346.45, п. 5 ст. 346.43 НК РФ, закон № 425-ФЗ <span class="st ok">действует</span></td></tr>
+            <tr><td>Патент не применяется к торговле через интернет и по договорам поставки</td><td>п. 3 ст. 346.43 НК РФ; письмо ФНС от 13.08.2024 № СД-4-3/9211@ <span class="st ok">действует</span></td></tr>
+            <tr><td>Взносы 30% / 15,1%, предельная база 3 311 000 ₽</td><td>ст. 425, п. 6 ст. 421 НК РФ <span class="st">проект постановления Правительства</span></td></tr>
+            <tr><td>Льготные взносы МСП: 15% или 7,6% сверх 1,5 МРОТ; МРОТ 28 935 ₽</td><td>ст. 427 НК РФ; законопроект № 619-9 <span class="st">МРОТ — законопроект</span></td></tr>
+            <tr><td>Взносы ИП за себя: 61 154 ₽ + 1%, не больше 342 923 ₽</td><td>п. 1.2 ст. 430 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Налог на прибыль 25%</td><td>п. 1 ст. 284 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>НДФЛ 13–22%, дивиденды 13% / 15%</td><td>ст. 224 НК РФ <span class="st ok">действует</span></td></tr>
+            <tr><td>Дивиденды по шкале 13–22% с учётом зарплаты</td><td>законопроект № 617-9 <span class="st">законопроект</span></td></tr>
+            <tr><td>Риск по «конвертам»: проверка за 3 года; штраф агента по НДФЛ 20%, по взносам 20–40%; пени</td><td>п. 4 ст. 89, ст. 123, ст. 122, ст. 75 НК РФ <span class="st ok">действует</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <div class="notes">
+      <p><b>Как считаем.</b> Права на 2027 год — по доходу 2026 года. Нагрузка 2027 года — помесячно: если по плану доход превысит порог, новая ставка НДС применяется со следующего месяца, как в методических рекомендациях ФНС. Выручка распределена по месяцам равномерно.</p>
+      <p><b>Упрощения.</b> Зарплата делится поровну между сотрудниками. Вся прибыль ООО выплачивается одному собственнику-резиденту. Не учтены: взносы на травматизм, торговый сбор, имущественные налоги, совмещение УСН и патента, освобождение по ст. 145 НК РФ на ОСНО, НДС к возмещению, профессиональный вычет ИП на ОСНО. Риск по «конвертам» — оценка без пеней. Расчёт — ориентир для разговора, а не налоговая консультация.</p>
+      <p id="stamp"></p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* Ссылка на заявку. Вставьте адрес формы или бота — кнопка появится. */
+var CTA_URL = 'https://bothelp.cc/mini?domain=natalialegalizator&id=6&utm_source=kalkulyator_nalog_2027';
+var PARAMS_DATE = '30.10.2026';
+</script>
+<script>
+/* ============================================================
+   Калькулятор налоговой нагрузки TOPLINE · v2
+   Вход — показатели 2026 года, выход — нагрузка 2027 по правилам 2027.
+   Все параметры с источником. «ПРОЕКТ» — ещё не утверждено.
+   ============================================================ */
+var PARAMS = {
+  2026: {
+    year: 2026,
+    VAT: 0.22,              // п.3 ст.164 НК (425-ФЗ)
+    VAT_EXEMPT: 20e6,       // п.1 ст.145 НК
+    VAT5_MAX: 272.5e6,      // п.8 ст.164 НК, 250 млн × 1,090
+    USN_MAX: 490.5e6,       // п.4 ст.346.13 НК, 450 млн × 1,090
+    USN_EMP: 130,           // пп.15 п.3 ст.346.12 НК
+    PSN_MAX: 20e6,          // п.6 ст.346.45 НК (425-ФЗ)
+    PSN_EMP: 15,            // п.5 ст.346.43 НК
+    BASE: 2979000,          // постановление Правительства от 31.10.2025 № 1705
+    MROT: 27093,
+    IP_FIX: 57390,          // пп.1 п.1.2 ст.430 НК
+    IP_1PCT_MAX: 321818     // пп.1 п.1.2 ст.430 НК
+  },
+  2027: {
+    year: 2027,
+    VAT: 0.22,
+    VAT_EXEMPT: 20e6,       // п.1 ст.145 НК в ред. 228-ФЗ от 04.07.2026
+    VAT5_MAX: 288.25e6,     // ПРОЕКТ: 250 млн × 1,153
+    USN_MAX: 518.85e6,      // ПРОЕКТ: 450 млн × 1,153
+    USN_EMP: 130,
+    PSN_MAX: 15e6,          // п.6 ст.346.45 НК (425-ФЗ)
+    PSN_EMP: 15,
+    BASE: 3311000,          // ПРОЕКТ постановления Правительства
+    MROT: 28935,            // законопроект № 619-9
+    IP_FIX: 61154,
+    IP_1PCT_MAX: 342923
+  }
+};
+var NDFL_STEPS = [[2.4e6, .13], [5e6, .15], [20e6, .18], [50e6, .20], [Infinity, .22]]; // п.1 ст.224 НК
+var DIV_NOW = [[2.4e6, .13], [Infinity, .15]];                                         // п.1.1 ст.224 НК
+var MONTHS = ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'];
+var MONTHS_FROM = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+// Виды деятельности: можно ли патент (ст.346.43 НК)
+var ACTIVITIES = {
+  retail:  {name: 'Розничная торговля в магазине или павильоне', psn: true},
+  online:  {name: 'Торговля через маркетплейсы и интернет-магазин', psn: false, why: 'торговля через интернет — не розница для патента (п.3 ст.346.43 НК)'},
+  whole:   {name: 'Оптовая торговля, поставки юрлицам', psn: false, why: 'опт и договоры поставки патентом не покрываются (п.3 ст.346.43 НК)'},
+  service: {name: 'Услуги населению и бизнесу', psn: true},
+  food:    {name: 'Общепит', psn: true},
+  prod:    {name: 'Производство', psn: true},
+  build:   {name: 'Строительство и ремонт', psn: true},
+  it:      {name: 'IT, разработка, консалтинг', psn: true}
+};
+
+function progressive(steps, amount) {
+  var tax = 0, prev = 0;
+  for (var i = 0; i < steps.length; i++) {
+    if (amount <= prev) break;
+    tax += (Math.min(amount, steps[i][0]) - prev) * steps[i][1];
+    prev = steps[i][0];
+  }
+  return tax;
+}
+function progressiveOnTop(steps, already, amount) { return progressive(steps, already + amount) - progressive(steps, already); }
+
+// Взносы с выплат сотрудникам за год (ст.425, п.6 ст.421, ст.427 НК)
+function employeeInsurance(fot, n, priority, P) {
+  if (fot <= 0 || n <= 0) return 0;
+  var perYear = fot / n;
+  if (priority) {
+    // МСП: 30% в пределах 1,5 МРОТ, сверх — 15% (приоритетные отрасли) или 7,6% (обрабатывающие производства), ст.427 НК
+    var low = priority === 'manuf' ? 0.076 : 0.15;
+    var perMonth = perYear / 12, lim = 1.5 * P.MROT;
+    return (Math.min(perMonth, lim) * 0.30 + Math.max(0, perMonth - lim) * low) * 12 * n;
+  }
+  return (Math.min(perYear, P.BASE) * 0.30 + Math.max(0, perYear - P.BASE) * 0.151) * n;
+}
+// Взносы ИП за себя (ст.430 НК)
+function ipOwn(base1pct, P) { return P.IP_FIX + Math.min(Math.max(0, base1pct - 300000) * 0.01, P.IP_1PCT_MAX); }
+
+function nz(x) { x = +x; return isFinite(x) && x > 0 ? x : 0; }
+
+/* Нормализация входа.
+   income26 — доход 2026 без НДС (ст.346.15 / ст.248 НК)
+   vat26 — ставка НДС, которую платили в 2026: 0, 0.05, 0.07, 0.22
+   e22/e5/e7/e0 — оплачено поставщикам за 2026 с документами, суммы с НДС
+   envelope — зарплата «в конвертах» за год, на руки; nodocs — расходы без документов */
+function norm(inp) {
+  var o = {
+    form: inp.form === 'IP' ? 'IP' : 'OOO',
+    activity: ACTIVITIES[inp.activity] ? inp.activity : 'service',
+    regime26: inp.regime26 || 'usn_inc',
+    vat26: [0, 0.05, 0.07, 0.22].indexOf(+inp.vat26) >= 0 ? +inp.vat26 : 0,
+    income26: nz(inp.income26), n: Math.round(nz(inp.employees)), fot: nz(inp.payroll),
+    e22: nz(inp.e22), e5: nz(inp.e5), e7: nz(inp.e7), e0: nz(inp.e0),
+    envelope: nz(inp.envelope), nodocs: nz(inp.nodocs),
+    growth: isFinite(+inp.growth) ? Math.max(-90, Math.min(500, +inp.growth)) / 100 : 0,
+    prices: inp.prices === 'up' ? 'up' : 'same',
+    rateInc: nz(inp.rateInc) / 100, rateDr: nz(inp.rateDr) / 100,
+    patent26: nz(inp.patent26), patent27: nz(inp.patent27),
+    priority: (inp.priority === 'manuf' || inp.priority === 'prio') ? inp.priority : false, ownerSalary: nz(inp.ownerSalary)
+  };
+  if (o.regime26 === 'psn' || o.regime26 === 'osno') o.vat26 = o.regime26 === 'osno' ? 0.22 : 0;
+  o.nFixed = false;
+  if (o.fot > 0 && o.n === 0) { o.n = 1; o.nFixed = true; }
+  return o;
+}
+
+/* Расчёт одного режима за год помесячно.
+   schedule: функция (месяц, накопленный доход без НДС) → ставка НДС месяца или null (режим утрачен)
+   kind: 'inc' | 'dr' | 'osno' | 'psn' */
+function runYear(o, P, kind, schedule, k) {
+  // k — масштаб года к 2026 (рост); s — суммы года
+  var isIP = o.form === 'IP';
+  var fot = o.fot * k, n = o.n;
+  var e22 = o.e22 * k, e5 = o.e5 * k, e7 = o.e7 * k, e0 = o.e0 * k;
+  var ins = employeeInsurance(fot, n, o.priority, P);
+  var gross26 = o.income26 * (1 + o.vat26);       // что платили покупатели в 2026
+  var net26 = o.income26;
+  var cum = 0, rev = 0, vatOut = 0, vatIn = 0, exp = 0, lostAt = -1, rates = [];
+  for (var m = 0; m < 12; m++) {
+    var r = schedule(m, cum);
+    if (r === null) { lostAt = m; break; }
+    rates.push(r);
+    var net, gross;
+    if (o.prices === 'up') { net = net26 * k / 12; gross = net * (1 + r); }
+    else { gross = gross26 * k / 12; net = gross / (1 + r); }
+    rev += net; cum += net; vatOut += gross - net;
+    if ((kind === 'inc' || kind === 'dr') && cum > P.USN_MAX) { lostAt = m; break; }   // п.4 ст.346.13 НК
+    var deduct = (r === P.VAT) || kind === 'osno';
+    var ivat = e22 / 12 * .22 / 1.22 + e5 / 12 * .05 / 1.05 + e7 / 12 * .07 / 1.07;
+    if (deduct) { vatIn += ivat; exp += fot / 12 + (e22 + e5 + e7 + e0) / 12 - ivat; }
+    else { exp += fot / 12 + (e22 + e5 + e7 + e0) / 12; }   // на 5%, 7% и без НДС входной НДС — в расходы (пп.8 п.1 ст.346.16 НК)
+  }
+  if (lostAt >= 0) return {lostAt: lostAt};
+  var vat = Math.max(0, vatOut - vatIn);
+  var own = 0, main = 0, minTax = false, mainName = 'налог УСН';
+  if (kind === 'inc') {
+    if (isIP) own = ipOwn(rev, P);
+    var t = rev * o.rateInc;
+    var cut = (isIP && n === 0) ? Math.min(t, own) : Math.min(t * 0.5, ins + own);   // п.3.1 ст.346.21 НК
+    main = t - cut;
+  } else if (kind === 'dr') {
+    if (isIP) own = ipOwn(Math.max(0, rev - exp - ins), P);
+    var base = rev - exp - ins - own;
+    var mt = rev * 0.01;                                       // п.6 ст.346.18 НК
+    main = Math.max(base * o.rateDr, mt); minTax = main === mt && mt > 0 && base * o.rateDr < mt;
+  } else if (kind === 'osno') {
+    if (isIP) { own = ipOwn(Math.max(0, rev - exp - ins), P); main = progressive(NDFL_STEPS, Math.max(0, rev - exp - ins - own)); mainName = 'НДФЛ'; }
+    else { main = Math.max(0, rev - exp - ins) * 0.25; mainName = 'налог на прибыль'; }   // п.1 ст.284 НК
+  } else if (kind === 'psn') {
+    var pc = P.year === 2026 ? o.patent26 : o.patent27;
+    own = ipOwn(pc / 0.06, P);
+    var c2 = n === 0 ? Math.min(pc, own) : Math.min(pc * 0.5, ins + own);   // п.1.2 ст.346.51 НК
+    main = pc - c2; mainName = 'патент';
+  }
+  var cashOut = fot + e22 + e5 + e7 + e0 + ins;
+  var res = {rev: rev, vat: vat, main: main, ins: ins, own: own, minTax: minTax, mainName: mainName, rates: rates};
+  res.taxes = vat + main + ins + own;
+  res.receipts = rev + vatOut;
+  res.load = res.receipts > 0 ? res.taxes / res.receipts : 0;
+  res.left = res.receipts - cashOut - vat - main - own;   // осталось в бизнесе после налогов
+  if (isIP) { res.divNow = 0; res.divBill = 0; }
+  else {
+    var d = Math.max(0, res.left);
+    res.divNow = progressive(DIV_NOW, d);
+    res.divBill = progressiveOnTop(NDFL_STEPS, o.ownerSalary, d);
+  }
+  res.pocket = res.left - res.divNow;
+  res.pocketBill = res.left - res.divBill;
+  return res;
+}
+
+function rateLabel(rates) {
+  var segs = [], cur = null;
+  rates.forEach(function (r, m) { if (r !== cur) { segs.push([r, m]); cur = r; } });
+  var name = function (r) { return r === 0 ? 'без НДС' : 'НДС ' + Math.round(r * 100) + '%'; };
+  if (segs.length === 1) return name(segs[0][0]) + (segs[0][0] === 0.22 ? ' с вычетами' : '');
+  return segs.map(function (s, i) { return (i === 0 ? '' : 'с ' + MONTHS_FROM[s[1]] + ' ') + name(s[0]); }).join(' → ');
+}
+
+/* ===== 2027 ===== */
+function compute(inp) {
+  var o = norm(inp);
+  var P = PARAMS[2027], P26 = PARAMS[2026];
+  var k = 1 + o.growth;
+  var I26 = o.income26;
+  var I27 = I26 * k;                                              // доход 2027 без НДС, если цены растут на НДС
+  var R27 = o.prices === 'up' ? I27 : I26 * (1 + o.vat26) * k;    // поступления от покупателей 2027 при неизменных ценах
+  var isIP = o.form === 'IP';
+  var act = ACTIVITIES[o.activity];
+  var rows = [];
+
+  // Право на УСН в 2027: не утрачено в 2026 (п.4 ст.346.13), численность (пп.15 п.3 ст.346.12)
+  var fromOsno = o.regime26 === 'osno';
+  var NINE_MONTH_26 = 337.5e6 * 1.09;   // п.2 ст.346.12 НК: доход за 9 месяцев 2026 для перехода с 2027 (367,875 млн)
+  var usnKept = o.n <= P.USN_EMP && (fromOsno ? (isIP || I26 * 0.75 <= NINE_MONTH_26) : I26 <= P26.USN_MAX);
+  var usnWhy = o.n > P.USN_EMP ? 'больше 130 сотрудников' : (fromOsno ? 'доход за 9 месяцев 2026 года выше 367,875 млн ₽ (п.2 ст.346.12 НК)' : 'доход 2026 выше лимита УСН — право утрачено в 2026 году');
+  var locked = !fromOsno && o.regime26 !== 'psn' && (o.vat26 === 0.05 || o.vat26 === 0.07);
+
+  // Стартовая ставка 2027 по доходу 2026 (п.1 ст.145, п.8 ст.164 НК; Методрек. ФНС)
+  var startExempt = I26 <= P.VAT_EXEMPT;
+  var start5 = !startExempt && I26 <= P.VAT5_MAX;
+
+  // Графики ставок. cum — доход 2027 без НДС до текущего месяца
+  function makeSched(policy) {
+    var state = startExempt ? 0 : (policy === 'reduced' ? (start5 ? 0.05 : 0.07) : P.VAT);
+    return function (m, cum) {
+      // переход по итогам прошлого месяца
+      if (m > 0) {
+        if (state === 0 && cum > P.VAT_EXEMPT) state = policy === 'reduced' ? (cum > P.VAT5_MAX ? 0.07 : 0.05) : P.VAT;
+        else if (state === 0.05 && cum > P.VAT5_MAX) state = 0.07;
+      }
+      return state;
+    };
+  }
+  function schedFixed(r) { return function () { return r; }; }
+
+  function add(id, group, kind, sched, ok, why) {
+    var res = ok ? runYear(o, P, kind, sched, k) : null;
+    var row = {id: id, group: group, kind: kind, ok: ok, why: why};
+    if (res && res.lostAt >= 0) {
+      row.ok = false;
+      row.why = 'доход превысит лимит УСН в ' + MONTHS[res.lostAt] + ' — право на УСН утрачивается с начала квартала (п.4 ст.346.13 НК)';
+      res = null;
+    }
+    if (res) { for (var key in res) row[key] = res[key]; row.vatName = kind === 'osno' ? 'НДС 22% с вычетами' : (kind === 'psn' ? 'без НДС' : rateLabel(res.rates)); }
+    rows.push(row);
+    return row;
+  }
+
+  // УСН с пониженными ставками (или освобождением)
+  add('inc_red', 'УСН Доходы', 'inc', makeSched('reduced'), usnKept, usnWhy);
+  add('dr_red', 'УСН Доходы − расходы', 'dr', makeSched('reduced'), usnKept, usnWhy);
+  // УСН с НДС 22% — имеет смысл, только если НДС вообще возникает
+  var willVat = !startExempt || R27 > P.VAT_EXEMPT;
+  add('inc_22', 'УСН Доходы', 'inc', makeSched('22'), usnKept && willVat, !usnKept ? usnWhy : 'доход до 20 млн — НДС не возникает');
+  add('dr_22', 'УСН Доходы − расходы', 'dr', makeSched('22'), usnKept && willVat, !usnKept ? usnWhy : 'доход до 20 млн — НДС не возникает');
+  add('osno', 'ОСНО', 'osno', schedFixed(P.VAT), true, '');
+  if (isIP) {
+    var psnWhy = '', psnOk = true;
+    if (!act.psn) { psnOk = false; psnWhy = act.why; }
+    else if (o.n > P.PSN_EMP) { psnOk = false; psnWhy = 'больше 15 сотрудников (п.5 ст.346.43 НК)'; }
+    else if (o.patent27 <= 0) { psnOk = false; psnWhy = 'укажите стоимость патента на 2027 год'; }
+    else if (R27 > P.PSN_MAX) {
+      psnOk = false;
+      var mm = Math.min(11, Math.floor(P.PSN_MAX / (R27 / 12)));
+      psnWhy = 'доход превысит 15 млн в ' + MONTHS[mm] + ' — патент утрачивается (п.6 ст.346.45 НК)';
+    }
+    add('psn', 'Патент', 'psn', schedFixed(0), psnOk, psnWhy);
+  }
+  // Убираем дубли: если НДС нет весь год, строки «пониженная» и «22%» совпадают
+  rows.forEach(function (r) {
+    if (r.ok && r.rates && r.rates.every(function (x) { return x === 0; })) {
+      if (r.id === 'inc_22' || r.id === 'dr_22') { r.ok = false; r.why = 'в 2027 году НДС не возникает'; }
+      else r.vatName = 'без НДС весь год';
+    }
+  });
+
+  rows.forEach(function (r) { if (r.ok && locked && (r.id === 'inc_22' || r.id === 'dr_22')) r.locked = true; });
+  var ok = rows.filter(function (r) { return r.ok && !r.locked; });
+  var best = ok.slice().sort(function (a, b) { return a.taxes - b.taxes; })[0] || null;
+
+  // ===== 2026 на текущем режиме =====
+  var base26 = null;
+  (function () {
+    var kind = {usn_inc: 'inc', usn_dr: 'dr', osno: 'osno', psn: 'psn'}[o.regime26] || 'inc';
+    if (kind === 'psn' && !isIP) return;
+    var o26 = Object.assign({}, o, {growth: 0, prices: 'same'});
+    var r = runYear(o26, P26, kind, schedFixed(kind === 'psn' ? 0 : o.vat26), 1);
+    if (r.lostAt >= 0) return;
+    base26 = r; base26.kind = kind;
+  })();
+  // Тот же режим в 2027
+  var same27 = null;
+  (function () {
+    var id = {usn_inc: o.vat26 === 0.22 ? 'inc_22' : 'inc_red', usn_dr: o.vat26 === 0.22 ? 'dr_22' : 'dr_red', osno: 'osno', psn: 'psn'}[o.regime26];
+    same27 = rows.filter(function (r) { return r.id === id; })[0] || null;
+  })();
+
+  // ===== Неофициальные расходы: как сейчас и «в белую» =====
+  var grey = null;
+  if (o.envelope > 0 || o.nodocs > 0) {
+    var whiteGross = o.envelope / 0.87;     // чтобы на руки осталось столько же, НДФЛ 13% (п.1 ст.224 НК)
+    var w = compute(Object.assign({}, inp, {
+      payroll: o.fot + whiteGross, e0: o.e0 + o.nodocs, envelope: 0, nodocs: 0, employees: Math.max(o.n, 1)
+    }));
+    var cur = same27 && same27.ok ? same27 : best;
+    var wSame = cur && w ? w.rows.filter(function (x) { return x.id === cur.id && x.ok; })[0] : null;
+    var wBest = wSame || (w && w.best);
+    var curPocket = cur ? cur.pocket - (o.envelope + o.nodocs) * k : 0;
+    var curPocketBill = cur ? cur.pocketBill - (o.envelope + o.nodocs) * k : 0;
+    // Риск за 3 года (п.4 ст.89 НК): НДФЛ 13% + взносы 30% с «конвертов», штраф 20–40% (ст.122, 123 НК), без пеней
+    var yearBase = whiteGross * (0.13 + 0.30);
+    grey = {
+      envelope: o.envelope, nodocs: o.nodocs, whiteGross: whiteGross,
+      cur: cur, nowTaxes: cur ? cur.taxes : 0, nowPocket: curPocket, nowPocketBill: curPocketBill,
+      white: wBest, riskLow: yearBase * 3 * 1.2, riskHigh: yearBase * 3 * 1.4
+    };
+  }
+
+  // ===== Статус входа в 2027 =====
+  var status = [];
+  if (fromOsno && usnKept) status.push({lvl: 'info', t: 'Вы на ОСНО. Перейти на УСН с 1 января 2027 года можно, если подать уведомление до 31.12.2026 (п.1 ст.346.13 НК)' + (isIP ? '' : ', доход за 9 месяцев 2026 года не больше 367,875 млн ₽, остаточная стоимость основных средств не больше 200 млн ₽ и доля других организаций не больше 25% (п.2, пп.14, 16 п.3 ст.346.12 НК)') + '. Ниже — что будет на УСН в этом случае.'});
+  if (!usnKept && !(fromOsno && o.n <= P.USN_EMP)) status.push({lvl: 'crit', t: o.n > P.USN_EMP ? 'Упрощёнка недоступна: больше 130 сотрудников (пп.15 п.3 ст.346.12 НК).' : 'Доход 2026 года выше лимита УСН 2026 года (490,5 млн ₽). Право на УСН утрачено ещё в 2026 году (п.4 ст.346.13 НК).'});
+  else if (!usnKept) {
+    status.push({lvl: 'warn', t: 'На УСН с 2027 года перейти нельзя: ' + usnWhy + '.'});
+  } else {
+    if (startExempt) {
+      status.push({lvl: 'good', t: '1 января 2027 года вы входите без НДС: доход 2026 года не больше 20 млн ₽ (п.1 ст.145 НК в ред. закона № 228-ФЗ).'});
+      var redRow = rows.filter(function (r) { return r.id === 'inc_red' && r.ok; })[0];
+      if (redRow) {
+        var exceedM = redRow.rates.findIndex(function (x) { return x > 0; });
+        if (exceedM > 0) status.push({lvl: 'warn', t: 'По вашему плану доход 2027 года превысит 20 млн ₽, и НДС начнётся с 1 ' + MONTHS_FROM[exceedM] + ' (п.1 ст.145 НК). Ставку нужно выбрать заранее: ' + Math.round(redRow.rates[exceedM] * 100) + '% без вычетов или 22% с вычетами.'});
+      }
+    } else if (start5) {
+      status.push({lvl: 'warn', t: 'С 1 января 2027 года на УСН платите НДС: доход 2026 года выше 20 млн ₽. Доступна ставка 5% (доход 2026 года не выше ≈288,25 млн ₽, п.8 ст.164 НК) или 22% с вычетами.'});
+    } else {
+      status.push({lvl: 'warn', t: 'С 1 января 2027 года на УСН платите НДС по ставке 7% или 22% с вычетами: доход 2026 года выше порога ставки 5% (≈288,25 млн ₽, п.8 ст.164 НК).'});
+    }
+  }
+  if (isIP) {
+    var psnRow = rows.filter(function (r) { return r.id === 'psn'; })[0];
+    if (psnRow && !psnRow.ok && act.psn && o.n <= P.PSN_EMP && o.patent27 > 0) status.push({lvl: 'crit', t: 'Патент в 2027 году: лимит дохода снижается до 15 млн ₽ (п.6 ст.346.45 НК). С вашим планом ' + psnRow.why + '.'});
+    if (!act.psn) status.push({lvl: 'info', t: 'Патент для вашего вида деятельности недоступен: ' + act.why + '.'});
+  }
+  if (locked) status.push({lvl: 'info', t: 'Ставку ' + Math.round(o.vat26 * 100) + '% нужно применять не меньше 12 кварталов подряд (п.9 ст.164 НК). Перейти на 22% в 2027 году можно, только если закон даёт вам право отказаться от ставки, — проверим на консультации. Поэтому варианты с 22% показаны, но в выбор лучшего не входят.'});
+
+  var flags = [];
+  if (o.nFixed) flags.push({lvl: 'warn', t: 'Указаны зарплаты, но не указана численность. Взносы посчитаны как на одного человека.'});
+  if (o.n > 0 && o.fot / o.n / 12 < P26.MROT) flags.push({lvl: 'crit', t: 'Средняя официальная зарплата ниже МРОТ 2026 года (27 093 ₽). Налоговая сравнивает зарплаты с МРОТ и средними по отрасли и вызывает на комиссию. Если часть людей работает неполный день, сравните пропорционально.'});
+  if (o.envelope > 0) flags.push({lvl: 'crit', t: 'Зарплата «в конвертах» — главный источник доначислений при выездной проверке: НДФЛ, взносы, штраф 20–40% и пени за 3 года (ст.122, 123, п.4 ст.89 НК).'});
+  if (o.regime26 === 'usn_dr' || o.regime26 === 'osno') {
+    if (o.nodocs > 0) flags.push({lvl: 'info', t: 'Расходы без документов не уменьшают налог (п.2 ст.346.16, ст.252 НК). Если они сейчас стоят в расходах, это риск доначисления.'});
+  }
+
+  return {o: o, rows: rows, best: best, base26: base26, same27: same27, grey: grey, status: status, flags: flags, isIP: isIP, k: k};
+}
+
+if (typeof module !== 'undefined') module.exports = {compute: compute, PARAMS: PARAMS, progressive: progressive, progressiveOnTop: progressiveOnTop, employeeInsurance: employeeInsurance, ipOwn: ipOwn, runYear: runYear, norm: norm};
+
+</script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var form = 'OOO';
+  var ownerSalary = 0;
+  var lastVat = '0.05';
+  var num = function (id) { var el = $(id); return el ? (parseFloat(String(el.value).replace(/\s/g, '').replace(',', '.')) || 0) : 0; };
+  var rub = function (x) { return Math.round(x).toLocaleString('ru-RU') + ' ₽'; };
+  var mln = function (x) {
+    var a = Math.abs(x);
+    if (a >= 1e6) return (x / 1e6).toLocaleString('ru-RU', {maximumFractionDigits: a >= 1e8 ? 0 : 1}) + ' млн ₽';
+    if (a >= 1e3) return Math.round(x / 1e3).toLocaleString('ru-RU') + ' тыс. ₽';
+    return Math.round(x).toLocaleString('ru-RU') + ' ₽';
+  };
+  var pct = function (x) { return (x * 100).toLocaleString('ru-RU', {maximumFractionDigits: 1}) + '%'; };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var moneyIds = ['income26', 'payroll', 'e22', 'e5', 'e7', 'e0', 'envelope', 'nodocs', 'patent26', 'patent27', 'ownerSalary'];
+  function formatField(el) { if (moneyIds.indexOf(el.id) < 0) return; var v = num(el.id); el.value = v ? Math.round(v).toLocaleString('ru-RU') : ''; }
+
+  function setForm(f) {
+    form = f;
+    $('formOOO').setAttribute('aria-pressed', f === 'OOO');
+    $('formIP').setAttribute('aria-pressed', f === 'IP');
+    $('patentBox').hidden = f !== 'IP';
+    $('patentHint').hidden = f !== 'IP';
+    var sel = $('regime26'), opt = sel.querySelector('option[value=psn]');
+    if (f === 'IP' && !opt) { opt = document.createElement('option'); opt.value = 'psn'; opt.textContent = 'Патент'; sel.appendChild(opt); }
+    if (f !== 'IP' && opt) { if (sel.value === 'psn') sel.value = 'usn_inc'; opt.remove(); }
+    render();
+  }
+  $('formOOO').addEventListener('click', function () { setForm('OOO'); });
+  $('formIP').addEventListener('click', function () { setForm('IP'); });
+
+  function syncVatSelect() {
+    if (form !== 'IP' && $('regime26').value === 'psn') $('regime26').value = 'usn_inc';
+    var reg = $('regime26').value, v = $('vat26');
+    var fixed = reg === 'osno' || reg === 'psn';
+    if (fixed && !v.disabled) lastVat = v.value;
+    if (!fixed && v.disabled) v.value = lastVat;
+    v.disabled = fixed;
+    if (reg === 'osno') v.value = '0.22';
+    if (reg === 'psn') v.value = '0';
+  }
+
+  var NAMES = {usn_inc: 'УСН «Доходы»', usn_dr: 'УСН «Доходы минус расходы»', osno: 'ОСНО', psn: 'Патент'};
+
+  function render() {
+    syncVatSelect();
+    var inp = {
+      form: form, activity: $('activity').value, regime26: $('regime26').value, vat26: $('vat26').value,
+      income26: num('income26'), employees: num('employees'), payroll: num('payroll'),
+      e22: num('e22'), e5: num('e5'), e7: num('e7'), e0: num('e0'),
+      envelope: num('envelope'), nodocs: num('nodocs'),
+      growth: num('growth'), prices: $('prices').value,
+      rateInc: num('rateInc'), rateDr: num('rateDr'),
+      patent26: num('patent26'), patent27: num('patent27'),
+      priority: $('priority').value, ownerSalary: ownerSalary
+    };
+    var r = compute(inp), best = r.best, b26 = r.base26, s27 = r.same27;
+
+    // Сводка
+    var t1 = b26 ? '<div class="v">' + mln(b26.taxes) + '</div><div class="sub">' + esc(NAMES[inp.regime26]) + ' · нагрузка ' + pct(b26.load) + '</div>' : '<div class="sub">Нет данных</div>';
+    var t2;
+    if (s27 && s27.ok) {
+      var d = b26 ? s27.taxes - b26.taxes : 0;
+      t2 = '<div class="v">' + mln(s27.taxes) + '</div><div class="sub">' + (b26 ? (d >= 0 ? '<span class="up">+' + mln(d) + '</span>' : '<span class="down">−' + mln(-d) + '</span>') + ' к 2026 году' : '') + '</div>';
+    } else {
+      t2 = '<div class="v" style="font-size:18px">Не получится</div><div class="sub">' + esc(s27 ? s27.why : 'режим недоступен') + '</div>';
+    }
+    var t3 = best ? '<div class="v accent">' + mln(best.taxes) + '</div><div class="sub">' + esc(best.group) + ', ' + esc(best.vatName) + (s27 && s27.ok && s27 !== best ? ' · экономия <span class="down">' + mln(s27.taxes - best.taxes) + '</span>' : (s27 === best ? ' · ваш текущий режим' : '')) + '</div>' : '<div class="sub">Введите доход</div>';
+    $('summary').innerHTML =
+      '<div><div class="k">2026, ваш режим</div>' + t1 + '</div>' +
+      '<div><div class="k">2027, тот же режим</div>' + t2 + '</div>' +
+      '<div><div class="k">2027, лучший режим</div>' + t3 + '</div>';
+
+    // Статус
+    $('status').innerHTML = r.status.length ? r.status.map(function (s) { return '<div class="note ' + s.lvl + '">' + esc(s.t) + '</div>'; }).join('') : '<div class="note info">Вы на общей системе: НДС 22% с вычетами, как и в 2026 году.</div>';
+
+    // Таблица
+    var okRows = r.rows.filter(function (x) { return x.ok; }).sort(function (a, b) { return (a.locked ? 1 : 0) - (b.locked ? 1 : 0) || a.taxes - b.taxes; });
+    var offRows = r.rows.filter(function (x) { return !x.ok; });
+    var max = Math.max.apply(null, okRows.map(function (x) { return x.taxes; }).concat([1]));
+    $('tbody').innerHTML = okRows.concat(offRows).map(function (x) {
+      var cls = !x.ok ? 'off' : (x === best ? 'best' : '');
+      var pill = (x === best ? '<span class="pill">меньше всего</span>' : '') + (x === s27 ? '<span class="pill cur">ваш режим</span>' : '');
+      var sub = x.ok ? (esc(x.vatName) + (x.minTax ? ' · минимальный налог 1%' : '') + (x.locked ? ' · только если вправе отказаться от ставки ' + Math.round(inp.vat26 * 100) + '% (п. 9 ст. 164 НК РФ)' : '')) : ('недоступно: ' + esc(x.why));
+      if (!x.ok) return '<tr class="off"><td class="name"><b>' + esc(x.group) + pill + '</b><span>' + sub + '</span></td><td class="na" colspan="6" style="text-align:left">—</td></tr>';
+      return '<tr class="' + cls + '"><td class="name"><b>' + esc(x.group) + pill + '</b><span>' + sub + '</span></td>' +
+        '<td data-l="НДС">' + rub(x.vat) + '</td><td data-l="Налог" title="' + esc(x.mainName) + '">' + rub(x.main) + '</td><td data-l="Взносы">' + rub(x.ins + x.own) + '</td>' +
+        '<td class="total" data-l="Всего налогов">' + rub(x.taxes) + '<div class="bar"><i style="width:' + (x.taxes / max * 100).toFixed(1) + '%"></i></div></td>' +
+        '<td data-l="Нагрузка">' + pct(x.load) + '</td><td class="hand" data-l="Вам на руки">' + rub(x.pocket) + '</td></tr>';
+    }).join('');
+
+    // Мимо учёта
+    var g = r.grey;
+    if (g && best) {
+      var w = g.white;
+      $('greyBox').hidden = false;
+      $('greyBox').innerHTML = '<h2>Что идёт мимо учёта: как сейчас и в белую</h2><div class="cols">' +
+        '<div class="pcard"><div class="tag">Как сейчас, 2027</div>' +
+          '<div class="line"><span>Режим</span><span>' + esc(g.cur.group) + ', ' + esc(g.cur.vatName) + '</span></div>' +
+          '<div class="line"><span>Налоги по официальным цифрам</span><span>' + rub(g.nowTaxes) + '</span></div>' +
+          '<div class="line"><span>«Конверты» и расходы без документов</span><span>− ' + rub((g.envelope + g.nodocs) * r.k) + '</span></div>' +
+          '<div class="line"><span>Вам на руки</span><b>' + rub(g.nowPocket) + '</b></div>' +
+          '<div class="line" style="color:var(--crit)"><span>Риск доначислений за 3 года</span><span>' + mln(g.riskLow) + ' – ' + mln(g.riskHigh) + '</span></div>' +
+          '<div class="sub">НДФЛ 13% и взносы 30% с «конвертов», штраф 20% по НДФЛ (ст. 123 НК РФ) и 20–40% по взносам (ст. 122 НК РФ), без пеней, за 3 года (п. 4 ст. 89 НК РФ).</div></div>' +
+        '<div class="pcard dash"><div class="tag">В белую, 2027</div>' +
+          (w ? '<div class="line"><span>Режим</span><span>' + esc(w.group) + ', ' + esc(w.vatName) + '</span></div>' +
+          '<div class="line"><span>Налоги и взносы</span><span>' + rub(w.taxes) + '</span></div>' +
+          '<div class="line"><span>Вам на руки</span><b>' + rub(w.pocket) + '</b></div>' +
+          '<div class="line"><span>Разница с «как сейчас»</span><span>' + (w.pocket - g.nowPocket >= 0 ? '+' : '−') + rub(Math.abs(w.pocket - g.nowPocket)) + '</span></div>' +
+          '<div class="sub">«Конверты» оформлены как зарплата: начисляем ' + rub(g.whiteGross) + ' в год, чтобы на руки люди получили столько же. Расходы подтверждены документами.</div>' : '<div class="sub">Нет доступного режима.</div>') +
+        '</div></div>';
+    } else { $('greyBox').hidden = true; $('greyBox').innerHTML = ''; }
+
+    // До кармана
+    if (!best) { $('pocket').innerHTML = ''; }
+    else if (r.isIP) {
+      $('pocket').innerHTML = '<h2>Сколько остаётся вам</h2><div class="pcard"><div class="line"><span>' + esc(best.group) + ', ' + esc(best.vatName) + '</span><b>' + rub(best.pocket) + '</b></div><div class="sub">У ИП нет дивидендов: деньги после налогов можно забрать без НДФЛ. Законопроект о дивидендах ИП не касается.</div></div>';
+    } else {
+      var dv = Math.max(0, best.left), diff = best.pocketBill - best.pocket;
+      $('pocket').innerHTML = '<h2>Сколько доходит до собственника</h2>' +
+        '<p class="sub" style="margin:0 0 12px">Режим: ' + esc(best.group) + ', ' + esc(best.vatName) + '. В компании после налогов остаётся ' + rub(best.left) + '. Чтобы забрать эти деньги, ООО выплачивает дивиденды, с них удерживается НДФЛ.</p>' +
+        '<div class="cols">' +
+          '<div class="pcard"><div class="tag">Действующие правила</div><div class="line"><span>Дивиденды</span><span>' + rub(dv) + '</span></div><div class="line"><span>НДФЛ 13% / 15%</span><span>− ' + rub(best.divNow) + '</span></div><div class="line"><span>Вам на руки</span><b>' + rub(best.pocket) + '</b></div></div>' +
+          '<div class="pcard dash"><div class="tag">Если примут законопроект № 617-9</div><div class="line"><span>Дивиденды</span><span>' + rub(dv) + '</span></div><div class="line"><span>НДФЛ по шкале 13–22%</span><span>− ' + rub(best.divBill) + '</span></div><div class="line"><span>Вам на руки</span><b>' + rub(best.pocketBill) + '</b></div></div>' +
+        '</div>' +
+        '<div class="field" style="max-width:380px;margin-top:12px"><label for="ownerSalary">Ваша зарплата в этой компании, ₽/год</label><input type="text" inputmode="numeric" id="ownerSalary" value="' + (ownerSalary ? Math.round(ownerSalary).toLocaleString('ru-RU') : '') + '" placeholder="0"><small>По законопроекту ставку на дивиденды определяют с учётом зарплаты: чем она выше, тем дороже дивиденды.</small></div>' +
+        '<p class="sub" style="margin:10px 0 0">' + (diff < -0.5 ? 'Если закон примут в нынешнем виде, вы будете получать на <b>' + rub(-diff) + '</b> в год меньше.' : 'При таких цифрах законопроект почти ничего не меняет.') + '</p>';
+      var os = $('ownerSalary');
+      os.addEventListener('input', function () { ownerSalary = num('ownerSalary'); renderKeepFocus(); });
+      os.addEventListener('blur', function () { formatField(os); });
+    }
+
+    $('flags').innerHTML = r.flags.map(function (f) { return '<div class="note ' + f.lvl + '">' + esc(f.t) + '</div>'; }).join('');
+  }
+
+  function renderKeepFocus() {
+    var el = document.activeElement, id = el && el.id, pos = el && el.selectionStart, len = el && el.value ? el.value.length : 0;
+    render();
+    if (id && $(id)) { var n = $(id); n.focus(); try { var p = Math.max(0, pos + (n.value.length - len)); n.setSelectionRange(p, p); } catch (e) {} }
+  }
+
+  $('f').addEventListener('input', render);
+  $('f').addEventListener('change', render);
+  $('f').addEventListener('submit', function (e) { e.preventDefault(); });
+  Array.prototype.forEach.call(document.querySelectorAll('#f input[type=text]'), function (el) { el.addEventListener('blur', function () { formatField(el); }); });
+  if (CTA_URL) { $('ctaBtn').href = CTA_URL; $('ctaBtn').hidden = false; }
+  $('stamp').textContent = 'Параметры сверены ' + PARAMS_DATE + '. Проекты будут обновлены после утверждения.';
+  render();
+})();
+</script>
+
+</body>
+</html>
